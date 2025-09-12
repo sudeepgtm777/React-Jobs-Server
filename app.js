@@ -12,7 +12,8 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: 'http://localhost:5173', // frontend URL
+    origin:
+      'https://react-jobs-client-git-main-sudeep-gautams-projects.vercel.app/', // frontend URL
     credentials: true, // ✅ allow cookies
   })
 );
