@@ -9,8 +9,9 @@ const errorController = require('./controllers/errorController');
 
 const app = express();
 const allowedOrigins = [
-  'http://localhost:5173', // local frontend
-  'https://react-jobs-client-git-main-sudeep-gautams-projects.vercel.app', // deployed frontend
+  'http://localhost:5173',
+  'https://react-jobs-client-git-main-sudeep-gautams-projects.vercel.app',
+  'https://react-jobs-client.vercel.app',
 ];
 
 // Middleware
