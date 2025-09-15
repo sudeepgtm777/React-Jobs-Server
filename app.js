@@ -18,15 +18,16 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // allow requests with no origin (like Postman)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
+      if (!origin) return callback(null, true); // allow Postman or curl
+      // remove trailing slash from origin before checking
+      const originWithoutSlash = origin.replace(/\/$/, '');
+      if (allowedOrigins.includes(originWithoutSlash)) {
         return callback(null, true);
       } else {
         return callback(new Error('Not allowed by CORS'));
       }
     },
-    credentials: true, // allow cookies
+    credentials: true,
   })
 );
 app.use(express.json());
