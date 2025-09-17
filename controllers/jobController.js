@@ -30,7 +30,10 @@ exports.getJob = async (req, res) => {
 // Create job
 exports.createJob = async (req, res) => {
   try {
-    const job = await Job.create(req.body);
+    const job = await Job.create({
+      ...req.body,
+      createdBy: req.user._id,
+    });
     res.status(201).json({ status: 'success', data: { job } });
   } catch (err) {
     res.status(400).json({ status: 'fail', message: err.message });
@@ -40,14 +43,18 @@ exports.createJob = async (req, res) => {
 // Update job
 exports.updateJob = async (req, res) => {
   try {
-    const job = await Job.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!job) {
+    const job = await Job.findById(req.params.id);
+    if (!job)
       return res.status(404).json({ status: 'fail', message: 'Job not found' });
+
+    if (job.createdBy.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ status: 'fail', message: 'Not authorized' });
     }
+
+    Object.assign(job, req.body);
+    await job.save();
 
     res.status(200).json({ status: 'success', data: { job } });
   } catch (err) {
@@ -58,12 +65,17 @@ exports.updateJob = async (req, res) => {
 // Delete job
 exports.deleteJob = async (req, res) => {
   try {
-    const job = await Job.findByIdAndDelete(req.params.id);
-
-    if (!job) {
+    const job = await Job.findById(req.params.id);
+    if (!job)
       return res.status(404).json({ status: 'fail', message: 'Job not found' });
+
+    if (job.createdBy.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ status: 'fail', message: 'Not authorized' });
     }
 
+    await Job.findByIdAndDelete(req.params.id);
     res.status(204).json({ status: 'success', data: null });
   } catch (err) {
     res.status(400).json({ status: 'fail', message: err.message });

@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "68ca403da6b17a8e5be160a5",
+    "name": "Sudeep Gautam",
+    "email": "sudeep123@gmail.com",
+    "photo": "default.jpg",
+    "role": "user",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
+  },
+  {
+    "_id": "68ca50f1a6b17a8e5be160b6",
+    "name": "Gautam Sudeep",
+    "email": "sudeep12345@gmail.com",
+    "photo": "default.jpg",
+    "role": "user",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
+  }
+]
