@@ -18,8 +18,7 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true); // allow Postman or curl
-      // remove trailing slash from origin before checking
+      if (!origin) return callback(null, true);
       const originWithoutSlash = origin.replace(/\/$/, '');
       if (allowedOrigins.includes(originWithoutSlash)) {
         return callback(null, true);
