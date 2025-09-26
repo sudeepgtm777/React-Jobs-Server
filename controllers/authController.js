@@ -77,17 +77,20 @@ exports.logout = (req, res) => {
 
 exports.isLoggedIn = async (req, res, next) => {
   try {
-    let token;
-    if (req.cookies.jwt) {
-      token = req.cookies.jwt;
-    }
+    const token = req.cookies?.jwt;
 
-    if (!token) {
+    if (!token || token === 'loggedout') {
       return res.status(200).json({ loggedIn: false });
     }
 
     // Verify token
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    let decoded;
+    try {
+      decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    } catch (err) {
+      // Token invalid or expired
+      return res.status(200).json({ loggedIn: false });
+    }
 
     // Check if user still exists
     const currentUser = await User.findById(decoded.id);
@@ -98,6 +101,8 @@ exports.isLoggedIn = async (req, res, next) => {
     // ✅ User is logged in
     res.status(200).json({ loggedIn: true, user: currentUser });
   } catch (err) {
+    // Fallback for any unexpected error
+    console.error('Error in isLoggedIn:', err);
     res.status(200).json({ loggedIn: false });
   }
 };
