@@ -12,10 +12,7 @@ const DB = process.env.DATABASE.replace(
 
 async function startServer() {
   try {
-    await mongoose.connect(DB, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(DB, {});
     console.log('✅ Successfully connected to MongoDB');
 
     const port = process.env.PORT || 3000;
